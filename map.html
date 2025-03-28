@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Map with Dynamic Marker</title>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        #map {
-            height: 100vh;
-            width: 100%;
-        }
+        #map { height: 500px; width: 100%; }
     </style>
 </head>
 <body>
@@ -20,25 +15,25 @@
     <script>
         // Function to get URL parameters
         function getQueryParam(param) {
-            let urlParams = new URLSearchParams(window.location.search);
+            const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Get latitude & longitude from URL
-        var latitude = parseFloat(getQueryParam("lat")) || 19.0760; // Default: Mumbai
-        var longitude = parseFloat(getQueryParam("lng")) || 72.8777;
+        // Default: SSGMCE (20.3073, 77.0010)
+        let lat = parseFloat(getQueryParam("lat")) || 20.3073;
+        let lng = parseFloat(getQueryParam("lng")) || 77.0010;
 
-        // Initialize map
-        var map = L.map('map').setView([latitude, longitude], 15);
+        // Initialize the map
+        var map = L.map('map').setView([lat, lng], 15);
 
-        // Add OpenStreetMap tiles
+        // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add Marker
-        L.marker([latitude, longitude]).addTo(map)
-            .bindPopup("Live Location")
+        // Add marker at lat/lng
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup("SSGMCE (Default Location)")
             .openPopup();
     </script>
 
