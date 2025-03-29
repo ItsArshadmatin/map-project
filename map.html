@@ -1,49 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Map with Dynamic Marker</title>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap Viewer</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
-        #map { height: 500px; width: 100%; }
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-
     <div id="map"></div>
-
     <script>
-        // Function to get URL parameters
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
 
-        // Get location parameter in format "lat,lng"
-        let locationParam = getQueryParam("location");
-        let lat = 20.781528, lng = 76.678194; // Default coordinates
-        
-        if (locationParam) {
-            let coords = locationParam.split(',');
-            if (coords.length === 2) {
-                lat = parseFloat(coords[0]) || lat;
-                lng = parseFloat(coords[1]) || lng;
-            }
-        }
+        let lat = parseFloat(getQueryParam("lat")) || 20.780417; // Default latitude
+        let lng = parseFloat(getQueryParam("lng")) || 76.678167; // Default longitude
 
-        // Initialize the map
+        console.log("Latitude: " + lat, "Longitude: " + lng); // Debugging
+
+        // Initialize OpenStreetMap
         var map = L.map('map').setView([lat, lng], 15);
 
-        // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Add marker at lat/lng
-        L.marker([lat, lng]).addTo(map)
-            .bindPopup("Dynamic Location")
+        var marker = L.marker([lat, lng]).addTo(map)
+            .bindPopup("Your Location")
             .openPopup();
-    </script>
 
+        function updateMap() {
+            let newLat = parseFloat(getQueryParam("lat")) || 20.780417;
+            let newLng = parseFloat(getQueryParam("lng")) || 76.678167;
+            
+            console.log("Updated Latitude: " + newLat, "Updated Longitude: " + newLng);
+            
+            map.setView([newLat, newLng], 15);
+            marker.setLatLng([newLat, newLng])
+                .bindPopup("Updated Location")
+                .openPopup();
+        }
+
+        window.onload = updateMap;
+        window.onhashchange = updateMap;
+    </script>
 </body>
 </html>
