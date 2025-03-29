@@ -19,9 +19,17 @@
             return urlParams.get(param);
         }
 
-        // Default: SSGMCE (20.3073, 77.0010)
-        let lat = parseFloat(getQueryParam("lat")) || 20.781528;
-        let lng = parseFloat(getQueryParam("lng")) || 76.678194;
+        // Get location parameter in format "lat,lng"
+        let locationParam = getQueryParam("location");
+        let lat = 20.781528, lng = 76.678194; // Default coordinates
+        
+        if (locationParam) {
+            let coords = locationParam.split(',');
+            if (coords.length === 2) {
+                lat = parseFloat(coords[0]) || lat;
+                lng = parseFloat(coords[1]) || lng;
+            }
+        }
 
         // Initialize the map
         var map = L.map('map').setView([lat, lng], 15);
@@ -33,7 +41,7 @@
 
         // Add marker at lat/lng
         L.marker([lat, lng]).addTo(map)
-            .bindPopup("SSGMCE (Default Location)")
+            .bindPopup("Dynamic Location")
             .openPopup();
     </script>
 
